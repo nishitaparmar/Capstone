@@ -305,15 +305,39 @@ SQL code used for analysis:    select bus.name,bus.postal_code, bus.city, bus.st
                                from ((business bus INNER JOIN category cat 
                                ON bus.id = cat.business_id)
                                INNER JOIN hours hrs ON cat.business_id = hrs.business_id)
-                               where bus.city = "Las Vegas" and cat.category = "Restaurants"
+                               where bus.city = "Las Vegas"
                                group by bus.stars
                                      
-                               +---------------------+-------------+-----------+-------+--------------+-------------+----------------------+
-                               | name                | postal_code | city      | stars | review_count | category    | hours                |
-                               +---------------------+-------------+-----------+-------+--------------+-------------+----------------------+
-                               | Wingstop            | 89103       | Las Vegas |   3.0 |          123 | Restaurants | Saturday|11:00-0:00  |
-                               | Big Wong Restaurant | 89146       | Las Vegas |   4.0 |          768 | Restaurants | Saturday|10:00-23:00 |
-                               +---------------------+-------------+-----------+-------+--------------+-------------+----------------------+
+                               +--------------------------------+-------------+-----------+-------+--------------+------------------+---------------------+
+                               | name                           | postal_code | city      | stars | review_count | category         | hours               |
+                               +--------------------------------+-------------+-----------+-------+--------------+------------------+---------------------+
+                               | Walgreens                      | 89121       | Las Vegas |   2.5 |            6 | Beauty & Spas    | Saturday|8:00-22:00 |
+                               | Wingstop                       | 89103       | Las Vegas |   3.0 |          123 | Restaurants      | Saturday|11:00-0:00 |
+                               | Hi Scores - Blue Diamond       | 89139       | Las Vegas |   3.5 |          105 | Bars             | Saturday|0:00-0:00  |
+                               | Anthem Pediatrics              | 89118       | Las Vegas |   4.0 |           16 | Health & Medical | Saturday|8:00-12:00 |
+                               | Red Rock Canyon Visitor Center | 89161       | Las Vegas |   4.5 |           32 | Active Life      | Saturday|8:00-16:30 |
+                               | Desert Medical Equipment       | 89118       | Las Vegas |   5.0 |            4 | Shopping         | Monday|8:00-17:00   |
+                               +--------------------------------+-------------+-----------+-------+--------------+------------------+---------------------+
+
+                               select bus.name,bus.postal_code, bus.city, Avg(bus.stars), bus.review_count
+                               , cat.category, hrs.hours
+                               from ((business bus INNER JOIN category cat 
+                               ON bus.id = cat.business_id)
+                               INNER JOIN hours hrs ON cat.business_id = hrs.business_id)
+                               where cat.category = "Restaurants" 
+                               group by bus.stars
+			       
+			       +-----------------------------+-------------+-------------+----------------+--------------+-------------+----------------------+
+                               | name                        | postal_code | city        | Avg(bus.stars) | review_count | category    | hours                |
+                               +-----------------------------+-------------+-------------+----------------+--------------+-------------+----------------------+
+                               | 99 Cent Sushi               | M5B 2E5     | Toronto     |            2.0 |            5 | Restaurants | Saturday|11:00-23:00 |
+                               | Papa Da Vinci               | 15213       | Pittsburgh  |            2.5 |           28 | Restaurants | Saturday|11:00-3:00  |
+                               | The Erin Mills Pump & Patio | L5K 1P9     | Mississauga |            3.0 |           27 | Restaurants | Saturday|10:00-1:00  |
+                               | Cafe Tandoor                | 44202       | Aurora      |            3.5 |           32 | Restaurants | Saturday|11:30-14:00 |
+                               | Rise and Dine Cafe          | 44026       | Chesterland |            4.0 |           30 | Restaurants | Saturday|6:00-15:00  |
+                               | Cabin Fever                 | M6P 1A6     | Toronto     |            4.5 |           26 | Restaurants | Saturday|16:00-2:00  |
+                               | Green Corner Restaurant     | 85210       | Mesa        |            5.0 |          267 | Restaurants | Saturday|10:30-22:00 |
+                               +-----------------------------+-------------+-------------+----------------+--------------+-------------+----------------------+
 
 		
 		
